@@ -27,7 +27,11 @@ class RefundOrderRequest extends BaseAbstractRequest
      */
     public function getData()
     {
-        $this->validate('app_id', 'mch_id', 'out_trade_no', 'cert_path', 'key_path');
+        $this->validate(
+            'app_id', 'mch_id', 'out_trade_no',
+            'cert_path', 'key_path', 'out_refund_no', 'total_fee',
+            'refund_fee'
+        );
 
         $data = [
             'appid'           => $this->getAppId(),
@@ -40,8 +44,9 @@ class RefundOrderRequest extends BaseAbstractRequest
             'out_refund_no'   => $this->getOutRefundNo(),
             'total_fee'       => $this->getTotalFee(),
             'refund_fee'      => $this->getRefundFee(),
-            'refund_fee_type' => $this->getRefundFee(),//<>
-            'op_user_id'      => $this->getOpUserId() ?: $this->getMchId(),
+            'refund_fee_type' => $this->getRefundFeeType(),//<>
+            'notify_url'      => $this->getNotifyUrl(), //*
+            // 'op_user_id'      => $this->getOpUserId() ?: $this->getMchId(),
             'refund_account'  => $this->getRefundAccount(),
             'nonce_str'       => md5(uniqid()),
         ];
@@ -91,19 +96,19 @@ class RefundOrderRequest extends BaseAbstractRequest
     /**
      * @return mixed
      */
-    public function getOpUserId()
+    /*public function getOpUserId()
     {
         return $this->getParameter('op_user_id');
-    }
+    }*/
 
 
     /**
      * @param mixed $opUserId
      */
-    public function setOpUserId($opUserId)
+    /*public function setOpUserId($opUserId)
     {
         $this->setParameter('op_user_id', $opUserId);
-    }
+    }*/
 
 
     /**
@@ -196,7 +201,7 @@ class RefundOrderRequest extends BaseAbstractRequest
     /**
      * @return mixed
      */
-    public function getRefundType()
+    public function getRefundFeeType()
     {
         return $this->getParameter('refund_fee_type');
     }
@@ -205,11 +210,27 @@ class RefundOrderRequest extends BaseAbstractRequest
     /**
      * @param mixed $refundFeeType
      */
-    public function setRefundType($refundFeeType)
+    public function setRefundFeeType($refundFeeType)
     {
         $this->setParameter('refund_fee_type', $refundFeeType);
     }
 
+    /**
+     * @return mixed
+     */
+    public function getNotifyUrl()
+    {
+        return $this->getParameter('notify_url');
+    }
+
+
+    /**
+     * @param mixed $notifyUrl
+     */
+    public function setNotifyUrl($notifyUrl)
+    {
+        $this->setParameter('notify_url', $notifyUrl);
+    }
 
     /**
      * @return mixed
